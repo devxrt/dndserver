@@ -72,7 +72,8 @@ class GameProtocol(Protocol):
                 pc.C2S_RANKING_CHARACTER_REQ: ranking.get_character_ranking,
             }
             handler = [k for k in handlers.keys() if k == _id]
-            # if not handler:
+            if not handler:
+                return
             #     return logger.warning(f"Received {pc.PacketCommand.Name(_id)} {data} packet but no handler yet")
 
             # Heartbeat is handled separately because it doesn't use a header.
