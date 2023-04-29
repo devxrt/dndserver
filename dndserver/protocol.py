@@ -24,11 +24,13 @@ class GameProtocol(Protocol):
         logger.debug(f"Received connection from: {self.transport.client[0]}:{self.transport.client[1]}")
         user = User()
         sessions[self.transport] = user
+        logger.info(f"There are now {len(sessions)} concurrent connections")
 
     def connectionLost(self, reason):
         """Event for when a client disconnects from the server."""
         logger.debug(f"Lost connection to: {self.transport.client[0]}:{self.transport.client[1]}")
         del sessions[self.transport]
+        logger.info(f"There are now {len(sessions)} concurrent connections")
 
     def dataReceived(self, data: bytes) -> None:
         """Main loop for receiving request packets and sending response packets."""
@@ -69,8 +71,8 @@ class GameProtocol(Protocol):
                 pc.C2S_RANKING_CHARACTER_REQ: ranking.get_character_ranking,
             }
             handler = [k for k in handlers.keys() if k == _id]
-            if not handler:
-                return logger.warning(f"Received {pc.PacketCommand.Name(_id)} {data} packet but no handler yet")
+            # if not handler:
+            #     return logger.warning(f"Received {pc.PacketCommand.Name(_id)} {data} packet but no handler yet")
 
             # Heartbeat is handled separately because it doesn't use a header.
             if handler[0] == pc.C2S_ALIVE_REQ:
