@@ -21,7 +21,11 @@ async def main():
 
     # Start running the TCP server.
     logger.info(f"Running game server on tcp://{config.server.host}:{config.server.port}")
-    reactor.run()
+    try:
+        reactor.run()
+    finally:
+        logger.debug("stopping reactor...")
+        reactor.stop()
 
 
 if __name__ == "__main__":
