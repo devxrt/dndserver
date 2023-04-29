@@ -77,7 +77,7 @@ class GameProtocol(Protocol):
             #     return logger.warning(f"Received {pc.PacketCommand.Name(_id)} {data} packet but no handler yet")
 
             # Heartbeat is handled separately because it doesn't use a header.
-            if handler.get(0) == pc.C2S_ALIVE_REQ:
+            if handler[0] == pc.C2S_ALIVE_REQ:
                 return self.heartbeat()
 
             res = handlers[handler[0]](self, msg)
